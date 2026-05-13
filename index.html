@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Avaliação - UC00602 Modelar Bases de Dados Relacionais</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .student-info {
+            padding: 20px;
+            background: #f8f9fa;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        .student-info input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .student-info input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .questions {
+            padding: 20px;
+        }
+
+        .question {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .question pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .scenario {
+            background: #fff8e1;
+            border-left: 4px solid #ffa726;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .scenario strong {
+            color: #e65100;
+        }
+
+        .options {
+            margin-top: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .submit-section {
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: bold;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .unit-header {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            margin: 20px 20px 0 20px;
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .message {
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .countdown-timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background 0.5s, color 0.5s;
+        }
+
+        .countdown-timer .timer-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .countdown-timer .timer-display {
+            font-size: 28px;
+            font-weight: bold;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .countdown-timer.yellow {
+            background: #f0ad4e;
+            color: #fff;
+        }
+
+        .countdown-timer.red {
+            background: #d9534f;
+            color: #fff;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .lock-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .lock-content {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 550px;
+            width: 90%;
+        }
+
+        .lock-content .lock-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .lock-content h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .lock-content p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .lock-content .lock-countdown {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 20px;
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body>
+    <div class="lock-overlay" id="lockOverlay">
+        <div class="lock-content">
+            <div class="lock-icon">🔒</div>
+            <h2>Teste ainda não disponível</h2>
+            <p>Este teste só poderá ser iniciado a partir de:</p>
+            <p><strong>27 de março de 2026 às 19:15</strong></p>
+            <p style="margin-top: 15px;">O teste abrirá automaticamente em:</p>
+            <div class="lock-countdown" id="lockCountdown">--:--:--</div>
+        </div>
+    </div>
+
+    <div class="countdown-timer" id="countdownTimer" style="display:none;">
+        <div class="timer-label">⏱ Tempo Restante</div>
+        <div class="timer-display" id="timerDisplay">60:00</div>
+    </div>
+    <div class="container" id="testContainer" style="display:none;">
+        <div class="header">
+            <p style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">Escola Tecnológica e Profissional de Sicó</p>
+            <p style="font-size: 14px; margin-bottom: 3px;">CET - Técnico(a) Especialista em Cibersegurança</p>
+            <p style="font-size: 14px; margin-bottom: 15px;">UC00602 - Modelar bases de dados relacionais</p>
+            <h1>📝 Teste de Avaliação</h1>
+            <p>20 Questões | 45 minutos + 15 minutos de tolerância</p>
+        </div>
+
+        <div class="info-box">
+            <h3>📋 Instruções</h3>
+            <ul style="margin-left: 20px; line-height: 1.8;">
+                <li>O teste tem 20 questões de escolha múltipla</li>
+                <li>Cada questão vale 5 pontos (Total: 100 pontos)</li>
+                <li>Assinale apenas UMA resposta por questão</li>
+                <li>Pode rever as suas respostas antes de submeter</li>
+                <li>Após submeter não é possível alterar</li>
+                <li>As questões incluem conceitos teóricos e cenários práticos com SQL</li>
+            </ul>
+        </div>
+
+        <div class="student-info">
+            <h3 style="color: #667eea; margin-bottom: 15px;">👤 Dados do Formando</h3>
+            <input type="text" id="studentName" placeholder="Nome completo *" required>
+            <input type="text" id="studentNumber" placeholder="CETCS - Número *" required>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <form id="testForm">
+            <!-- PARTE 1 - EVOLUÇÃO DAS BDs E INTEGRIDADE REFERENCIAL -->
+            <div class="unit-header">📚 PARTE 1 - Evolução das BDs e Integridade Referencial (5 questões)</div>
+
+            <div class="questions">
+                <div class="question">
+                    <h3>1. Qual das seguintes opções descreve corretamente a evolução histórica dos modelos de bases de dados?</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q1" value="a" id="q1a"><label for="q1a">a) Relacional → Hierárquico → Rede → NoSQL</label></div>
+                        <div class="option"><input type="radio" name="q1" value="b" id="q1b"><label for="q1b">b) Hierárquico → Rede → Relacional → Orientado a Objetos / NoSQL</label></div>
+                        <div class="option"><input type="radio" name="q1" value="c" id="q1c"><label for="q1c">c) NoSQL → Relacional → Hierárquico → Rede</label></div>
+                        <div class="option"><input type="radio" name="q1" value="d" id="q1d"><label for="q1d">d) Rede → Relacional → Hierárquico → NoSQL</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>2. Quem é considerado o "pai" do modelo relacional, tendo publicado em 1970 o artigo que estabeleceu as suas bases teóricas?</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q2" value="a" id="q2a"><label for="q2a">a) Tim Berners-Lee</label></div>
+                        <div class="option"><input type="radio" name="q2" value="b" id="q2b"><label for="q2b">b) Edgar F. Codd</label></div>
+                        <div class="option"><input type="radio" name="q2" value="c" id="q2c"><label for="q2c">c) Alan Turing</label></div>
+                        <div class="option"><input type="radio" name="q2" value="d" id="q2d"><label for="q2d">d) Linus Torvalds</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>3. Antes do aparecimento dos SGBD, a informação era guardada em ficheiros isolados por aplicação. Qual era o principal problema desta abordagem?</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q3" value="a" id="q3a"><label for="q3a">a) Os discos eram demasiado rápidos para a informação</label></div>
+                        <div class="option"><input type="radio" name="q3" value="b" id="q3b"><label for="q3b">b) Redundância e inconsistência de dados, com dificuldade em manter a integridade entre aplicações</label></div>
+                        <div class="option"><input type="radio" name="q3" value="c" id="q3c"><label for="q3c">c) Excesso de segurança e encriptação obrigatória</label></div>
+                        <div class="option"><input type="radio" name="q3" value="d" id="q3d"><label for="q3d">d) Inexistência de linguagens de programação adequadas</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>4. O que significa "integridade referencial" numa base de dados relacional?</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q4" value="a" id="q4a"><label for="q4a">a) Garantir que todos os campos de texto são escritos sem erros ortográficos</label></div>
+                        <div class="option"><input type="radio" name="q4" value="b" id="q4b"><label for="q4b">b) Garantir que cada chave estrangeira aponta sempre para um registo válido (existente) na tabela referenciada, ou tem o valor NULL</label></div>
+                        <div class="option"><input type="radio" name="q4" value="c" id="q4c"><label for="q4c">c) Garantir que os dados são feitos backup todos os dias</label></div>
+                        <div class="option"><input type="radio" name="q4" value="d" id="q4d"><label for="q4d">d) Garantir que apenas o administrador pode aceder aos dados</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>5. Qual destas é uma restrição (constraint) que contribui diretamente para a integridade dos dados?</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q5" value="a" id="q5a"><label for="q5a">a) BACKUP</label></div>
+                        <div class="option"><input type="radio" name="q5" value="b" id="q5b"><label for="q5b">b) NOT NULL, UNIQUE, CHECK, PRIMARY KEY e FOREIGN KEY</label></div>
+                        <div class="option"><input type="radio" name="q5" value="c" id="q5c"><label for="q5c">c) SELECT, INSERT, UPDATE e DELETE</label></div>
+                        <div class="option"><input type="radio" name="q5" value="d" id="q5d"><label for="q5d">d) HTML, CSS e JavaScript</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTE 2 - CONCEITOS FUNDAMENTAIS DE SGBD -->
+            <div class="unit-header">📚 PARTE 2 - Conceitos Fundamentais de SGBD (5 questões)</div>
+
+            <div class="questions">
+                <div class="question">
+                    <h3>6. O que significa a sigla SGBD?</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q6" value="a" id="q6a"><label for="q6a">a) Sistema Geral de Bases de Dados</label></div>
+                        <div class="option"><input type="radio" name="q6" value="b" id="q6b"><label for="q6b">b) Sistema de Gestão de Bases de Dados</label></div>
+                        <div class="option"><input type="radio" name="q6" value="c" id="q6c"><label for="q6c">c) Servidor Genérico de Dados Binários</label></div>
+                        <div class="option"><input type="radio" name="q6" value="d" id="q6d"><label for="q6d">d) Sistema Gráfico de Bases Dinâmicas</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>7. No modelo relacional, uma tabela é também designada por:</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q7" value="a" id="q7a"><label for="q7a">a) Tuplo</label></div>
+                        <div class="option"><input type="radio" name="q7" value="b" id="q7b"><label for="q7b">b) Atributo</label></div>
+                        <div class="option"><input type="radio" name="q7" value="c" id="q7c"><label for="q7c">c) Relação</label></div>
+                        <div class="option"><input type="radio" name="q7" value="d" id="q7d"><label for="q7d">d) Domínio</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>8. O que é uma chave primária (Primary Key)?</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q8" value="a" id="q8a"><label for="q8a">a) Um campo que pode conter valores repetidos</label></div>
+                        <div class="option"><input type="radio" name="q8" value="b" id="q8b"><label for="q8b">b) Um campo ou conjunto de campos que identifica unicamente cada registo</label></div>
+                        <div class="option"><input type="radio" name="q8" value="c" id="q8c"><label for="q8c">c) Um campo que aceita o valor NULL</label></div>
+                        <div class="option"><input type="radio" name="q8" value="d" id="q8d"><label for="q8d">d) Um índice de pesquisa opcional</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>9. Uma chave estrangeira (Foreign Key) serve para:</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q9" value="a" id="q9a"><label for="q9a">a) Encriptar os dados da tabela</label></div>
+                        <div class="option"><input type="radio" name="q9" value="b" id="q9b"><label for="q9b">b) Estabelecer uma relação entre duas tabelas, referenciando a chave primária de outra tabela</label></div>
+                        <div class="option"><input type="radio" name="q9" value="c" id="q9c"><label for="q9c">c) Acelerar consultas SQL</label></div>
+                        <div class="option"><input type="radio" name="q9" value="d" id="q9d"><label for="q9d">d) Substituir a chave primária quando esta falha</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>10. No Modelo Entidade-Relação (MER), o que representa uma entidade?</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q10" value="a" id="q10a"><label for="q10a">a) Uma operação a executar na base de dados</label></div>
+                        <div class="option"><input type="radio" name="q10" value="b" id="q10b"><label for="q10b">b) Um objeto ou conceito do mundo real sobre o qual queremos guardar informação</label></div>
+                        <div class="option"><input type="radio" name="q10" value="c" id="q10c"><label for="q10c">c) Um tipo de dados como INTEGER ou TEXT</label></div>
+                        <div class="option"><input type="radio" name="q10" value="d" id="q10d"><label for="q10d">d) Uma ligação física entre servidores</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTE 3 - CENÁRIOS PRÁTICOS COM SQL -->
+            <div class="unit-header">📚 PARTE 3 - Cenários Práticos com SQL (10 questões)</div>
+
+            <div class="questions">
+                <div class="question">
+                    <h3>11. Numa relação entre duas entidades, a cardinalidade "1:N" (um-para-muitos) significa que:</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q11" value="a" id="q11a"><label for="q11a">a) Cada entidade A pode estar relacionada com uma única entidade B, e vice-versa</label></div>
+                        <div class="option"><input type="radio" name="q11" value="b" id="q11b"><label for="q11b">b) Uma entidade A pode relacionar-se com várias entidades B, mas cada B só com uma A</label></div>
+                        <div class="option"><input type="radio" name="q11" value="c" id="q11c"><label for="q11c">c) Cada entidade A pode relacionar-se com várias B, e cada B com várias A</label></div>
+                        <div class="option"><input type="radio" name="q11" value="d" id="q11d"><label for="q11d">d) Nenhuma das entidades pode existir sem a outra</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>12. Considere o seguinte excerto do schema da base de dados de Cibersegurança:</h3>
+                    <pre>CREATE TABLE UTILIZADOR (
+    IdUtilizador  INTEGER PRIMARY KEY AUTOINCREMENT,
+    NomeCompleto  TEXT    NOT NULL,
+    Email         TEXT    NOT NULL UNIQUE,
+    NivelAcesso   TEXT    NOT NULL CHECK (NivelAcesso IN
+                  ('Admin', 'Analista', 'Operador', 'Auditor', 'Leitor'))
+);</pre>
+                    <p style="margin-top: 10px;">O que acontece se um analista tentar inserir um utilizador com <code>NivelAcesso = 'SuperUser'</code>?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q12" value="a" id="q12a"><label for="q12a">a) O registo é inserido normalmente</label></div>
+                        <div class="option"><input type="radio" name="q12" value="b" id="q12b"><label for="q12b">b) O registo é inserido com o valor convertido para 'Admin'</label></div>
+                        <div class="option"><input type="radio" name="q12" value="c" id="q12c"><label for="q12c">c) A inserção falha devido à violação da restrição CHECK</label></div>
+                        <div class="option"><input type="radio" name="q12" value="d" id="q12d"><label for="q12d">d) O valor é guardado como NULL</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>13. Cenário:</h3>
+                    <div class="scenario">
+                        <strong>Cenário:</strong> Na tabela <code>INCIDENTE</code>, o campo <code>IdAmeaca</code> é uma chave estrangeira que referencia <code>AMEACA(IdAmeaca)</code>, com a cláusula <code>ON DELETE RESTRICT</code>.
+                    </div>
+                    <p>O que acontece se tentar eliminar uma ameaça que está associada a incidentes existentes?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q13" value="a" id="q13a"><label for="q13a">a) A ameaça e todos os incidentes associados são eliminados em cascata</label></div>
+                        <div class="option"><input type="radio" name="q13" value="b" id="q13b"><label for="q13b">b) A eliminação é bloqueada pelo SGBD, protegendo a integridade referencial</label></div>
+                        <div class="option"><input type="radio" name="q13" value="c" id="q13c"><label for="q13c">c) A ameaça é eliminada e os incidentes ficam com IdAmeaca a NULL</label></div>
+                        <div class="option"><input type="radio" name="q13" value="d" id="q13d"><label for="q13d">d) A ameaça é eliminada mas é gerado um aviso</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>14. Cenário:</h3>
+                    <div class="scenario">
+                        <strong>Cenário:</strong> Pretende-se modelar a relação entre <code>INCIDENTE</code> e <code>ATIVO</code>, sabendo que um incidente pode afetar vários ativos e um ativo pode ser afetado por vários incidentes.
+                    </div>
+                    <p>Qual é a abordagem correta?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q14" value="a" id="q14a"><label for="q14a">a) Adicionar uma chave estrangeira IdAtivo em INCIDENTE</label></div>
+                        <div class="option"><input type="radio" name="q14" value="b" id="q14b"><label for="q14b">b) Adicionar uma chave estrangeira IdIncidente em ATIVO</label></div>
+                        <div class="option"><input type="radio" name="q14" value="c" id="q14c"><label for="q14c">c) Criar uma tabela de associação INCIDENTE_ATIVO com chaves estrangeiras para ambas as tabelas</label></div>
+                        <div class="option"><input type="radio" name="q14" value="d" id="q14d"><label for="q14d">d) Juntar os dois conceitos numa única tabela INCIDENTE_ATIVO</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>15. Considere o seguinte comando SQL:</h3>
+                    <pre>SELECT Severidade, COUNT(*) AS Total
+FROM INCIDENTE
+GROUP BY Severidade;</pre>
+                    <p>O que esta consulta devolve?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q15" value="a" id="q15a"><label for="q15a">a) Todos os incidentes ordenados por severidade</label></div>
+                        <div class="option"><input type="radio" name="q15" value="b" id="q15b"><label for="q15b">b) O número total de incidentes existentes na tabela</label></div>
+                        <div class="option"><input type="radio" name="q15" value="c" id="q15c"><label for="q15c">c) O número de incidentes existentes em cada nível de severidade</label></div>
+                        <div class="option"><input type="radio" name="q15" value="d" id="q15d"><label for="q15d">d) Apenas o incidente com maior severidade</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>16. Considere a seguinte definição de campo:</h3>
+                    <pre>ScoreRisco REAL NOT NULL
+    CHECK (ScoreRisco >= 0.0 AND ScoreRisco <= 10.0)</pre>
+                    <p>Qual dos seguintes valores é aceite?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q16" value="a" id="q16a"><label for="q16a">a) NULL</label></div>
+                        <div class="option"><input type="radio" name="q16" value="b" id="q16b"><label for="q16b">b) 7.5</label></div>
+                        <div class="option"><input type="radio" name="q16" value="c" id="q16c"><label for="q16c">c) -1.0</label></div>
+                        <div class="option"><input type="radio" name="q16" value="d" id="q16d"><label for="q16d">d) 11.0</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>17. Cenário:</h3>
+                    <div class="scenario">
+                        <strong>Cenário:</strong> A tabela <code>ACAO</code> tem uma chave estrangeira <code>IdIncidente</code> que referencia <code>INCIDENTE(IdIncidente)</code> com a cláusula <code>ON DELETE CASCADE</code>.
+                    </div>
+                    <p>O que acontece quando um incidente é eliminado?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q17" value="a" id="q17a"><label for="q17a">a) As ações associadas mantêm-se com IdIncidente a NULL</label></div>
+                        <div class="option"><input type="radio" name="q17" value="b" id="q17b"><label for="q17b">b) Todas as ações associadas ao incidente são eliminadas automaticamente</label></div>
+                        <div class="option"><input type="radio" name="q17" value="c" id="q17c"><label for="q17c">c) A eliminação do incidente é bloqueada</label></div>
+                        <div class="option"><input type="radio" name="q17" value="d" id="q17d"><label for="q17d">d) Apenas a primeira ação associada é eliminada</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>18. Qual é o objetivo principal de criar um índice (CREATE INDEX) numa coluna?</h3>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q18" value="a" id="q18a"><label for="q18a">a) Garantir que os valores são únicos</label></div>
+                        <div class="option"><input type="radio" name="q18" value="b" id="q18b"><label for="q18b">b) Acelerar a pesquisa, ordenação e filtragem de dados nessa coluna</label></div>
+                        <div class="option"><input type="radio" name="q18" value="c" id="q18c"><label for="q18c">c) Encriptar os dados da coluna</label></div>
+                        <div class="option"><input type="radio" name="q18" value="d" id="q18d"><label for="q18d">d) Reduzir o tamanho da base de dados em disco</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>19. Considere a seguinte consulta SQL que utiliza uma vista (VIEW):</h3>
+                    <pre>SELECT * FROM v_Incidentes_Detalhados
+WHERE Severidade IN ('Alta', 'Critica')
+ORDER BY ScoreRisco DESC;</pre>
+                    <p>Qual é a principal vantagem de utilizar a vista <code>v_Incidentes_Detalhados</code> em vez de escrever o JOIN completo?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q19" value="a" id="q19a"><label for="q19a">a) As vistas executam sempre mais rápido que consultas normais</label></div>
+                        <div class="option"><input type="radio" name="q19" value="b" id="q19b"><label for="q19b">b) Permite reutilizar uma consulta complexa, simplificando o código e aumentando a manutenibilidade</label></div>
+                        <div class="option"><input type="radio" name="q19" value="c" id="q19c"><label for="q19c">c) As vistas armazenam fisicamente os dados, ocupando menos espaço</label></div>
+                        <div class="option"><input type="radio" name="q19" value="d" id="q19d"><label for="q19d">d) Permitem inserir dados sem validar restrições</label></div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>20. Cenário:</h3>
+                    <div class="scenario">
+                        <strong>Cenário:</strong> O responsável do SOC pediu um relatório com a seguinte informação: <strong>título do incidente, nome da ameaça, nome do utilizador que reportou, nomes dos ativos afetados e total de ações executadas</strong>, mas apenas para incidentes de severidade <strong>'Alta' ou 'Critica'</strong>, ordenado pelo score de risco da ameaça.
+                    </div>
+                    <p>Considere as tabelas <code>INCIDENTE</code>, <code>AMEACA</code>, <code>UTILIZADOR</code>, <code>ATIVO</code>, a tabela de associação <code>INCIDENTE_ATIVO</code> e <code>ACAO</code>. Qual das seguintes consultas está <strong>correta</strong>?</p>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q20" value="a" id="q20a"><label for="q20a">a) <pre style="margin:5px 0;font-size:12px;">SELECT i.Titulo, a.Nome, u.NomeCompleto, at.NomeAtivo, COUNT(ac.IdAcao)
+FROM INCIDENTE i, AMEACA a, UTILIZADOR u, ATIVO at, ACAO ac
+WHERE i.Severidade IN ('Alta', 'Critica')
+ORDER BY a.ScoreRisco DESC;</pre></label></div>
+                        <div class="option"><input type="radio" name="q20" value="b" id="q20b"><label for="q20b">b) <pre style="margin:5px 0;font-size:12px;">SELECT i.Titulo, a.Nome AS Ameaca, u.NomeCompleto AS Reporter,
+       at.NomeAtivo, COUNT(ac.IdAcao) AS TotalAcoes
+FROM INCIDENTE i
+JOIN AMEACA a            ON i.IdAmeaca   = a.IdAmeaca
+JOIN UTILIZADOR u        ON i.IdReporter = u.IdUtilizador
+JOIN INCIDENTE_ATIVO ia  ON i.IdIncidente = ia.IdIncidente
+JOIN ATIVO at            ON ia.IdAtivo    = at.IdAtivo
+LEFT JOIN ACAO ac        ON i.IdIncidente = ac.IdIncidente
+WHERE i.Severidade IN ('Alta', 'Critica')
+GROUP BY i.IdIncidente, at.IdAtivo
+ORDER BY a.ScoreRisco DESC;</pre></label></div>
+                        <div class="option"><input type="radio" name="q20" value="c" id="q20c"><label for="q20c">c) <pre style="margin:5px 0;font-size:12px;">SELECT Titulo, Nome, NomeCompleto, NomeAtivo, COUNT(*)
+FROM INCIDENTE
+JOIN AMEACA, UTILIZADOR, ATIVO, ACAO
+WHERE Severidade = 'Alta' OR 'Critica'
+ORDER BY ScoreRisco;</pre></label></div>
+                        <div class="option"><input type="radio" name="q20" value="d" id="q20d"><label for="q20d">d) <pre style="margin:5px 0;font-size:12px;">SELECT i.Titulo, a.Nome, u.NomeCompleto, at.NomeAtivo, COUNT(ac.IdAcao)
+FROM INCIDENTE i
+JOIN AMEACA a ON i.IdAmeaca = a.IdAmeaca
+JOIN UTILIZADOR u ON i.IdReporter = u.IdAtivo
+JOIN ATIVO at ON i.IdIncidente = at.IdAtivo
+WHERE i.Severidade IN ('Alta', 'Critica');</pre></label></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 10px;">A submeter teste...</p>
+                </div>
+                <div class="message" id="message"></div>
+                <button type="submit" class="submit-btn" id="submitBtn">📤 Submeter Teste</button>
+                <p style="margin-top: 15px; color: #666;">Certifique-se de que respondeu a todas as questões antes de submeter.</p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Prevenir saída/refresh acidental da página
+        window.addEventListener('beforeunload', function(e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+
+        // Configuração - ALTERE ESTE URL após configurar o Google Sheets
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyCKktAjwDNq0nDtNvPMoy4BSqHJw0NtdYFOtyw24LIhQ2zjWTVFedN8wJUyuMVMcPG/exec';
+        const form = document.getElementById('testForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loading');
+        const message = document.getElementById('message');
+        const progressBar = document.getElementById('progressBar');
+
+        // Total de questões
+        const TOTAL_QUESTIONS = 20;
+
+        // Atualizar barra de progresso
+        const radios = document.querySelectorAll('input[type="radio"]');
+        radios.forEach(radio => {
+            radio.addEventListener('change', updateProgress);
+        });
+
+        function updateProgress() {
+            let answered = 0;
+            for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) {
+                    answered++;
+                }
+            }
+            const percentage = (answered / TOTAL_QUESTIONS) * 100;
+            progressBar.style.width = percentage + '%';
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const studentName = document.getElementById('studentName').value.trim();
+            const studentNumber = document.getElementById('studentNumber').value.trim();
+            const studentClass = "UC00602 - Modelar bases de dados relacionais";
+
+            if (!studentName || !studentNumber) {
+                showMessage('Por favor, preencha todos os dados do formando!', 'error');
+                return;
+            }
+
+            // Verificar se todas as questões foram respondidas
+            const unanswered = [];
+            for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+                if (!document.querySelector(`input[name="q${i}"]:checked`)) {
+                    unanswered.push(i);
+                }
+            }
+
+            if (unanswered.length > 0) {
+                const proceed = confirm(`Ainda faltam ${unanswered.length} questão(ões) por responder (Questões: ${unanswered.join(', ')}).\n\nDeseja submeter o teste mesmo assim?`);
+                if (!proceed) {
+                    return;
+                }
+            }
+
+            // Respostas corretas
+            const correctAnswers = {
+                q1:'b',  q2:'b',  q3:'b',  q4:'b',  q5:'b',
+                q6:'b',  q7:'c',  q8:'b',  q9:'b',  q10:'b',
+                q11:'b', q12:'c', q13:'b', q14:'c', q15:'c',
+                q16:'b', q17:'b', q18:'b', q19:'b', q20:'b'
+            };
+
+            // Recolher respostas e calcular classificação
+            const answers = {};
+            let correctCount = 0;
+            for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                answers[`q${i}`] = selected ? selected.value : '';
+                if (selected && selected.value === correctAnswers[`q${i}`]) {
+                    correctCount++;
+                }
+            }
+            const classification = correctCount * 5; // cada questão vale 5 pontos, máximo 100
+
+            // Preparar dados
+            const data = {
+                timestamp: new Date().toLocaleString('pt-PT'),
+                name: studentName,
+                number: studentNumber,
+                class: studentClass,
+                ...answers,
+                classification: classification + ' / 100'
+            };
+
+            // Submeter
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            message.style.display = 'none';
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                showMessage('✅ Teste submetido com sucesso! Obrigado.', 'success');
+                form.reset();
+                progressBar.style.width = '0%';
+            } catch (error) {
+                showMessage('❌ Erro ao submeter. Verifique a configuração ou tente novamente.', 'error');
+                submitBtn.disabled = false;
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = 'message ' + type;
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+
+    <script>
+        (function() {
+            // Data de início do teste - ajustar conforme necessário
+            const startDate = new Date('2026-03-27T19:15:00');
+            const lockOverlay = document.getElementById('lockOverlay');
+            const lockCountdown = document.getElementById('lockCountdown');
+            const testContainer = document.getElementById('testContainer');
+            const timerBox = document.getElementById('countdownTimer');
+            const timerDisplay = document.getElementById('timerDisplay');
+
+            function checkLock() {
+                const now = new Date();
+                const diff = startDate - now;
+
+                if (diff <= 0) {
+                    // Test is available — unlock
+                    lockOverlay.style.display = 'none';
+                    testContainer.style.display = '';
+                    timerBox.style.display = '';
+                    clearInterval(lockInterval);
+                    startExamTimer();
+                } else {
+                    // Show countdown to start
+                    const h = Math.floor(diff / 3600000);
+                    const m = Math.floor((diff % 3600000) / 60000);
+                    const s = Math.floor((diff % 60000) / 1000);
+                    lockCountdown.textContent =
+                        String(h).padStart(2, '0') + ':' +
+                        String(m).padStart(2, '0') + ':' +
+                        String(s).padStart(2, '0');
+                }
+            }
+
+            const lockInterval = setInterval(checkLock, 1000);
+            checkLock();
+
+            function startExamTimer() {
+                // 60 minutos (45 + 15 de tolerância)
+                let totalSeconds = 60 * 60;
+
+                function updateTimer() {
+                    if (totalSeconds <= 0) {
+                        timerDisplay.textContent = '00:00';
+                        clearInterval(examInterval);
+                        return;
+                    }
+
+                    totalSeconds--;
+                    const minutes = Math.floor(totalSeconds / 60);
+                    const seconds = totalSeconds % 60;
+                    timerDisplay.textContent = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+
+                    timerBox.classList.remove('yellow', 'red');
+                    if (totalSeconds <= 10 * 60) {
+                        timerBox.classList.add('red');
+                    } else if (totalSeconds <= 25 * 60) {
+                        timerBox.classList.add('yellow');
+                    }
+                }
+
+                const examInterval = setInterval(updateTimer, 1000);
+            }
+        })();
+    </script>
+</body>
+</html>
